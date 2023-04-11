@@ -1,5 +1,5 @@
 import { Database, DatabaseReference, get, increment, ref, set } from "firebase/database";
-import { isNumber } from "./Utils";
+import { abbreviateNumber, isNumber } from "./Utils";
 
 export class CounterElement {
   element: HTMLElement;
@@ -8,29 +8,37 @@ export class CounterElement {
   config;
   current = 0;
 
-  constructor(element: HTMLElement, database: Database) {
+  constructor(element: HTMLElement, database: Database, defaultAbbreviation: boolean) {
     this.element = element;
     this.database = database;
     this.config = (() => {
       const config = Object.assign({}, {
         path: "",
-        increment: 0
+        increment: 0,
+        abbreviation: defaultAbbreviation
       }, element.dataset);
 
       const increment = Number(config.increment);
       config.increment = isNumber(increment) ? increment : 0;
+
+      config.abbreviation = typeof config.abbreviation === "boolean" ? config.abbreviation : ["true", "1"].includes(config.abbreviation);
 
       return config;
     })();
     this.ref = ref(this.database, this.config.path);
   }
 
+  setDataView(number: number) {
+    const current = this.config.abbreviation ? abbreviateNumber(number) : number;
+    this.element.setAttribute("data-view", current as never);
+  }
+
   async getView() {
     const snapshot = await get(this.ref);
     const data = snapshot.exists() ? snapshot.val() : null;
     const current: string = isNumber(data) ? data : 0;
-    this.element.setAttribute("data-view", current);
     this.current = current as never;
+    this.setDataView(this.current);
     return this.current;
   }
 
@@ -44,7 +52,7 @@ export class CounterElement {
         console.error(error);
       }
     }
-    this.element.setAttribute("data-view", this.current as never);
+    this.setDataView(this.current);
     return this.current;
   }
 }
