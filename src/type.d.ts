@@ -1,4 +1,5 @@
 declare interface Options {
   databaseUrl: string,
-  selector: string
+  selector: string,
+  abbreviation?: boolean,
 }
