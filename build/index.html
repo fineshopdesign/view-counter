@@ -3,6 +3,7 @@
     }</style></head><body><h1>Database Project</h1><div data-path="/BLOG_0000/POST_0001" data-increment="1" class="view-counter"></div><div data-path="/BLOG_0000/POST_0002" data-increment="1" class="view-counter"></div><div data-path="/BLOG_0000/TOTAL_VIEWS" data-increment="false" class="view-counter"></div><script>document.addEventListener("DOMContentLoaded", function () {
       const counter = new ViewCounter({
         databaseUrl: "https://example.firebaseio.com",
-        selector: ".view-counter"
+        selector: ".view-counter",
+        abbreviation: true
       });
     });</script><script src="bundle.js"></script></body></html>
