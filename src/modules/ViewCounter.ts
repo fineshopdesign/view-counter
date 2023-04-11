@@ -10,6 +10,7 @@ export default class ViewCounter {
   app: FirebaseApp;
   database: Database;
   elements: Array<CounterElement>;
+  abbreviation: boolean;
 
   static counters: Array<ViewCounter> = []
 
@@ -20,6 +21,7 @@ export default class ViewCounter {
 
     this.databaseUrl = options.databaseUrl;
     this.selector = options.selector;
+    this.abbreviation = options.abbreviation === true;
     this.app = initializeApp({
       databaseURL: this.databaseUrl
     }, `View_Counter_${current}`);
@@ -54,7 +56,7 @@ export default class ViewCounter {
       throw new Error("Attribute 'data-path' is required");
     }
 
-    const counterElement = new CounterElement(element, this.database);
+    const counterElement = new CounterElement(element, this.database, this.abbreviation);
     
     // @ts-expect-error
     element.viewCounter = counterElement;
