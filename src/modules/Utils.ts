@@ -1,8 +1,8 @@
-export function isNumber(any: any): boolean {
+export const isNumber = (any: any): boolean => {
   return typeof any === "number" && Number.isFinite(any) && !Number.isNaN(any)
 }
 
-export function abbreviateNumber(arg: string | number): string {
+export const abbreviateNumber = (arg: string | number): string => {
   const number = Number(arg);
   const SI_PREFIXES = [
     { value: 1, symbol: '' },

@@ -1,11 +1,17 @@
 import { Database, DatabaseReference, get, increment, ref, set } from "firebase/database";
 import { abbreviateNumber, isNumber } from "./Utils";
 
+export type CounterElementConfig = {
+  path: string;
+  increment: number;
+  abbreviation: boolean;
+} & DOMStringMap;
+
 export class CounterElement {
   element: HTMLElement;
   database: Database;
   ref: DatabaseReference;
-  config;
+  config: CounterElementConfig;
   current = 0;
 
   constructor(element: HTMLElement, database: Database, defaultAbbreviation: boolean) {
@@ -48,7 +54,7 @@ export class CounterElement {
       try {
         await set(this.ref, increment(increase));
         this.current += increase;
-      } catch(error) {
+      } catch (error) {
         console.error(error);
       }
     }
